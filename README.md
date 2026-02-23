@@ -1,6 +1,6 @@
 # TextForge for Claude Code
 
-<img src="https://textforge.net/images/og-image.png" width="300" alt="TextForge Logo">
+<img src="https://raw.githubusercontent.com/textforge-app/openclaw-textforge/master/assets/textforge-logo.png" width="300" alt="TextForge Logo">
 
 Official Claude Code plugin for [TextForge](https://textforge.net) — safely automate your Gmail with AI.
 
@@ -19,7 +19,7 @@ This plugin connects Claude Code to the TextForge MCP server so you can ask Clau
 ### 1. Get Your TextForge API Token
 
 1. Sign up at [textforge.net](https://textforge.net/login)
-2. Generate a token at [textforge.net/settings/tokens](https://textforge.net/settings/tokens)
+2. Generate a token at [textforge.net/tokens](https://textforge.net/tokens)
 3. Set the environment variable in your shell config (`.bashrc`, `.zshrc`, etc.):
    ```bash
    export TEXTFORGE_API_KEY="your-token-here"
