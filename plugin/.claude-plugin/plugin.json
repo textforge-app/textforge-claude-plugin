@@ -1,0 +1,11 @@
+{
+  "name": "textforge",
+  "version": "1.0.0",
+  "description": "TextForge MCP server — human approval gate for AI-authored emails",
+  "author": {
+    "name": "Petabridge",
+    "email": "support@textforge.net"
+  },
+  "homepage": "https://textforge.net/docs/mcp",
+  "repository": "https://github.com/textforge-app/textforge-claude-plugin"
+}

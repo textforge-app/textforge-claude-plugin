@@ -1,0 +1,27 @@
+{
+  "name": "textforge",
+  "owner": {
+    "name": "Petabridge",
+    "email": "support@textforge.net"
+  },
+  "metadata": {
+    "description": "TextForge MCP server for Claude Code — human approval gate for AI-authored emails"
+  },
+  "plugins": [
+    {
+      "name": "textforge",
+      "source": "./plugin",
+      "description": "Connect Claude Code to TextForge for human-approved AI email automation. Draft emails from your Gmail — nothing sends without your approval.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Petabridge",
+        "email": "support@textforge.net"
+      },
+      "homepage": "https://textforge.net/docs/mcp",
+      "repository": "https://github.com/textforge-app/textforge-claude-plugin",
+      "license": "MIT",
+      "keywords": ["email", "gmail", "approval", "ai-agent", "mcp"],
+      "category": "productivity"
+    }
+  ]
+}

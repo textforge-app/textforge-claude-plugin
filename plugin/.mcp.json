@@ -1,0 +1,9 @@
+{
+  "textforge": {
+    "type": "http",
+    "url": "https://textforge.net/mcp",
+    "headers": {
+      "Authorization": "Bearer ${TEXTFORGE_API_KEY}"
+    }
+  }
+}
