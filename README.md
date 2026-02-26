@@ -16,28 +16,35 @@ This plugin connects Claude Code to the TextForge MCP server so you can ask Clau
 
 ## Installation
 
-### 1. Get Your TextForge API Token
+### Option A — OAuth (No Token Required)
 
-1. Sign up at [textforge.net](https://textforge.net/login)
-2. Generate a token at [textforge.net/tokens](https://textforge.net/tokens)
-3. Set the environment variable in your shell config (`.bashrc`, `.zshrc`, etc.):
+The fastest way to connect. Claude Code handles authentication automatically:
+
+```bash
+claude mcp add textforge https://textforge.net/mcp
+```
+
+Claude Code will open your browser to sign in and grant access. If you're new to TextForge, you'll be walked through account creation and setup before the connection completes — the full onboarding takes 5-15 minutes for new users, under 60 seconds for existing users.
+
+Once authorized, your connection appears in [Settings → API Tokens](https://textforge.net/tokens) as **"MCP - Claude Code"**. You can revoke it there at any time.
+
+### Option B — API Key (Plugin Marketplace)
+
+Good for CI/headless environments or if you prefer explicit token management:
+
+1. Sign up at [textforge.net](https://textforge.net/login) and generate a token at [textforge.net/tokens](https://textforge.net/tokens)
+2. Set the environment variable in your shell config (`.bashrc`, `.zshrc`, etc.):
    ```bash
    export TEXTFORGE_API_KEY="your-token-here"
    ```
-
-### 2. Add the Plugin Marketplace
-
-```
-/plugin marketplace add textforge-app/textforge-claude-plugin
-```
-
-### 3. Install the Plugin
-
-```
-/plugin install textforge@textforge
-```
-
-That's it. Claude Code will now have access to TextForge tools.
+3. Add the plugin marketplace:
+   ```
+   /plugin marketplace add textforge-app/textforge-claude-plugin
+   ```
+4. Install the plugin:
+   ```
+   /plugin install textforge@textforge
+   ```
 
 ---
 
