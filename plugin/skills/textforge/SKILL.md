@@ -1,4 +1,5 @@
 ---
+name: "textforge"
 description: "Draft, search, and manage emails via TextForge — human approval required before anything sends."
 ---
 
@@ -58,7 +59,7 @@ Search the inbox with Gmail-style query syntax.
 
 ### `mcp__textforge__search_threads_by_contact`
 
-Find threads by a contact's email address.
+Find threads by a contact email address.
 
 **Parameters:**
 - `email` (string, required): Contact email to search for
