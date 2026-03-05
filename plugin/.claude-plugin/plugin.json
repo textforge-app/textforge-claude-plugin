@@ -1,7 +1,7 @@
 {
   "name": "textforge",
-  "version": "1.1.0",
-  "description": "TextForge MCP server — human approval gate for AI-authored emails",
+  "version": "2.0.0",
+  "description": "TextForge MCP server — 22 tools for email drafts, threads, and attachments with human approval. Includes email writing best practices and AI pattern detection.",
   "author": {
     "name": "Petabridge",
     "email": "support@textforge.net"
