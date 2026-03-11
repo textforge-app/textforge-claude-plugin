@@ -21,7 +21,7 @@ This plugin connects Claude Code to the TextForge MCP server so you can ask Clau
 The fastest way to connect. Claude Code handles authentication automatically:
 
 ```bash
-claude mcp add textforge https://textforge.net/mcp
+claude mcp add textforge --transport http https://textforge.net/mcp
 ```
 
 Claude Code will open your browser to sign in and grant access. If you're new to TextForge, you'll be walked through account creation and setup before the connection completes — the full onboarding takes 5-15 minutes for new users, under 60 seconds for existing users.
