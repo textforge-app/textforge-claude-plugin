@@ -4,6 +4,8 @@
 
 Official Claude Code plugin for [TextForge](https://textforge.net) — safely automate your Gmail with AI.
 
+**[Start free trial →](https://textforge.net/login)** — 7 days free, no credit card required.
+
 ---
 
 ## What This Does
@@ -160,6 +162,7 @@ Also available as an [OpenClaw skill](https://github.com/textforge-app/openclaw-
 ## Learn More
 
 - **[TextForge](https://textforge.net)** — Home
+- **[MCP Setup Generator](https://textforge.net/tools/mcp-setup-generator)** — Get the exact config for your client (Cursor, Windsurf, VS Code, etc.)
 - **[MCP Documentation](https://textforge.net/docs/mcp)** — Full tool reference and setup guides
 - **[Use Cases](https://textforge.net/use-cases)** — Sales follow-ups, support replies, inbox zero, and more
 
