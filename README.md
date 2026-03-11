@@ -2,17 +2,19 @@
 
 <img src="https://raw.githubusercontent.com/textforge-app/openclaw-textforge/master/assets/textforge-logo.png" width="300" alt="TextForge Logo">
 
-Official Claude Code plugin for [TextForge](https://textforge.net) — safely automate your Gmail with AI.
+Official Claude Code plugin for [TextForge](https://textforge.net) — personal email automation with AI drafting and human approval.
 
-**[Start free trial →](https://textforge.net/login)** — 7 days free, no credit card required.
+**[Start free trial →](https://textforge.net/login)** — 7 days free. Card on file, no charge until trial ends.
 
 ---
 
 ## What This Does
 
-TextForge gives Claude access to your Gmail with a mandatory human approval step on every email. Claude can read threads, search your inbox, draft replies, manage attachments, and track draft activity — but **nothing sends without your review**.
+You write the same emails every week. Follow-ups, vendor onboarding, client check-ins. TextForge lets Claude draft them for you — reading your threads, pulling context from your CRM or files, and composing the message. You review and approve before anything sends from your Gmail.
 
-This plugin connects Claude Code to the TextForge MCP server so you can ask Claude to help with email directly in your coding sessions. It includes 22 MCP tools and bundled skills for writing effective, human-sounding emails.
+This plugin connects Claude Code to the TextForge MCP server. It includes 22 MCP tools and bundled skills for writing effective, human-sounding emails.
+
+**Nothing sends without your approval.** Claude can draft, read, search, and manage attachments — but every email waits in your TextForge queue until you hit approve.
 
 ---
 
@@ -115,17 +117,15 @@ Full 22-tool reference with parameter documentation, attachment workflow, and dr
 
 Once installed, try asking Claude:
 
-> "Draft a follow-up email to the thread with sarah@example.com from last week"
+> "Go through my Pipedrive deals and draft follow-ups for anything that's been quiet for 2 weeks"
 
-> "Search my inbox for emails about the Q1 proposal and draft a status update reply"
+> "Draft a reply to the thread with sarah@example.com — she asked for the Q1 proposal status"
 
-> "List my 10 most recent inbox threads"
+> "Search my inbox for the vendor security questionnaire and draft a response using our existing data"
 
 > "Download the PDF from the latest email from accounting and attach it to my reply draft"
 
-> "Show me all my pending drafts and their approval status"
-
-> "What happened with the draft I created yesterday? Show me the activity log"
+> "Show me all my pending drafts waiting for approval"
 
 Every draft Claude creates queues in TextForge for your review. You approve it — or you don't. Nothing sends automatically.
 
@@ -142,7 +142,7 @@ Every draft Claude creates queues in TextForge for your review. You approve it �
 
 ## Pricing
 
-Both plans include a 7-day free trial. No credit card required to start.
+Both plans include a 7-day free trial. Card on file, no charge until the trial ends.
 
 | Plan | Price | Includes |
 |------|-------|---------|
