@@ -5,13 +5,13 @@
     "email": "support@textforge.net"
   },
   "metadata": {
-    "description": "TextForge MCP server for Claude Code — human approval gate for AI-authored emails"
+    "description": "Personal email automation for Claude Code — AI drafts your emails, you approve before they send from your Gmail"
   },
   "plugins": [
     {
       "name": "textforge",
       "source": "./plugin",
-      "description": "Connect Claude Code to TextForge for human-approved AI email automation. 22 tools for drafts, threads, and attachments. Includes email writing best practices and AI pattern detection.",
+      "description": "Connect Claude Code to TextForge for personal email automation. AI drafts emails from your threads and CRM context — you review and approve before anything sends from your Gmail. 22 tools for drafts, threads, and attachments. Includes email writing best practices and AI pattern detection.",
       "version": "2.0.0",
       "author": {
         "name": "Petabridge",
