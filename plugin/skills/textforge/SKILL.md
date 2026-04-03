@@ -9,16 +9,32 @@ Use this skill when the user wants to draft emails, read inbox threads, search e
 
 For email composition best practices, see the `email-writing` skill.
 
+## ID Types
+
+TextForge uses two types of thread identifiers:
+
+| ID Type | Format | Example | Where It Appears |
+|---------|--------|---------|-----------------|
+| Internal ID (`id`) | GUID | `3fa85f64-5717-4562-b3fc-2c963f66afa6` | `list_threads`, `list_engaged_threads`, `search_threads_by_contact`, matched results in `search_messages` |
+| Provider ID (`externalThreadId`) | Hex string | `19d2243fcda1917c` | `search_messages` (unmatched results), email headers |
+
+- Use **internal IDs** with: `get_thread`, `sync_thread`, `create_draft` (threadId param)
+- Use **provider IDs** with: `get_thread_by_external_id`, `import_thread`
+- **Never pass a provider ID to `get_thread`** — it requires GUID format and will error
+
 ## Workflow
 
-1. **Find context** — `search_threads_by_contact`, `search_messages`, or `get_thread`
-2. **Import if needed** — `import_thread` to pull in threads not yet in TextForge
-3. **Draft email** — `create_draft` with `bodyFormat: "Html"` (see `email-writing` skill for composition guidelines)
-4. **Attach files** — `get_draft_attachment_upload_url` then upload via presigned URL
-5. **User gets notified** — Slack, Discord, or webhook with draft preview
-6. **User reviews/approves** — edit in TextForge UI, then send
-7. **If edits needed** — use `update_draft`, never delete/recreate
-8. **Check activity** — `get_draft_activity` to see full draft history
+1. **Find context** — `search_messages`, `search_threads_by_contact`, `list_threads`, or `list_recent_messages`
+   - `search_messages` returns two groups: **matched threads** (already in TextForge, have an `id` GUID) and **unmatched provider threads** (only have `externalThreadId`)
+   - `list_recent_messages` returns individual messages filtered by date — useful for "what came in recently?"
+2. **Import if needed** — For unmatched results from `search_messages`, use `import_thread` with the `externalThreadId` to pull the thread into TextForge. This returns the internal `id`.
+3. **Read thread** — `get_thread` with the internal `id` (GUID format). Do NOT pass provider thread IDs to this tool — use `get_thread_by_external_id` for those.
+4. **Draft email** — `create_draft` with `bodyFormat: "Html"` (see `email-writing` skill for composition guidelines)
+5. **Attach files** — `get_draft_attachment_upload_url` then upload via presigned URL
+6. **User gets notified** — Slack, Discord, or webhook with draft preview
+7. **User reviews/approves** — edit in TextForge UI, then send
+8. **If edits needed** — use `update_draft`, never delete/recreate
+9. **Check activity** — `get_draft_activity` to see full draft history
 
 Never tell the user an email was "sent" — it was drafted and queued for their approval.
 
@@ -48,7 +64,7 @@ Create an email draft for human approval.
 - `toRecipients` (string, required): Comma-separated recipient emails
 - `ccRecipients` (string, optional): Comma-separated CC emails
 - `bccRecipients` (string, optional): Comma-separated BCC emails
-- `threadId` (string, optional): Reply to existing thread
+- `threadId` (string, optional): Internal TextForge thread ID (GUID) to reply to an existing thread
 - `scheduledFor` (string, optional): ISO 8601 datetime for scheduled send
 
 Drafts are automatically submitted for approval upon creation.
@@ -104,63 +120,79 @@ Permanently delete a draft. Only works on non-sendable statuses.
 
 - `draftId` (string, required): The draft ID
 
-### Thread Management (9 tools)
+### Thread Management (10 tools)
 
 #### `mcp__textforge__list_threads`
 
-List email threads with optional filtering.
+List email threads with optional filtering. Returns threads with `hasUnreadReply`, `lastInboundAt`, and `lastOutboundAt` fields.
 
-- `limit` (number, optional): Max threads to return (default: 20)
-- `label` (string, optional): Filter by label (e.g., `"INBOX"`, `"SENT"`)
+- `participantEmail` (string, optional): Filter by participant email address
+- `page` (number, optional): Page number, 1-based (default: 1)
+- `pageSize` (number, optional): Items per page (default: 25, max: 100)
 
 #### `mcp__textforge__list_engaged_threads`
 
-List threads where you have previously sent at least one message.
+List threads where you have previously sent at least one message, ordered by most recent activity. Includes `hasUnreadReply` (true when the latest message is inbound — the ball is in your court) plus `lastInboundAt` and `lastOutboundAt` timestamps. Use this to find conversations that need a response.
 
-- `limit` (number, optional): Max threads (default: 20)
+- `page` (number, optional): Page number, 1-based (default: 1)
+- `pageSize` (number, optional): Items per page (default: 25, max: 100)
 
 #### `mcp__textforge__get_thread`
 
-Get full thread details including messages and threading headers for replies.
+Get full thread details including messages and threading headers for replies. Requires an internal TextForge thread ID (GUID format).
 
-- `threadId` (string, required): The thread ID
+- `threadId` (string, required): Internal TextForge thread ID (GUID format, e.g., `"3fa85f64-5717-4562-b3fc-2c963f66afa6"`). Use the `id` field from `list_threads`, `search_threads_by_contact`, or matched `search_messages` results. Do NOT pass provider/Gmail thread IDs here — use `get_thread_by_external_id` for those.
+- `maxMessages` (number, optional): Max messages to return (default: 5, set to 0 for all)
+- `stripQuotedReplies` (boolean, optional): Strip quoted reply content (default: true)
 
 #### `mcp__textforge__get_thread_by_external_id`
 
-Look up a thread by the email provider's thread ID.
+Look up a thread by the email provider's thread ID. Use this with provider thread IDs from `search_messages` results or email headers. If not found, use `import_thread` to import it first.
 
-- `externalId` (string, required): Provider thread ID (e.g., Gmail thread ID)
+- `externalThreadId` (string, required): Provider thread ID (e.g., Gmail thread ID like `"19d2243fcda1917c"`)
+- `maxMessages` (number, optional): Max messages to return (default: 5, set to 0 for all)
+- `stripQuotedReplies` (boolean, optional): Strip quoted reply content (default: true)
 
 #### `mcp__textforge__search_messages`
 
-Search email using provider-delegated search syntax (e.g., Gmail search operators).
+Search emails using Gmail-style query syntax. Returns two result groups:
+- `threads` — already in TextForge, have `id` (GUID) and full metadata (subject, participants, timestamps) for use with `get_thread`
+- `unmatchedProviderThreads` — not yet imported, have `externalThreadId` only — use `import_thread` first
 
-- `query` (string, required): Search query (e.g., `"from:alice@example.com after:2026-01-01"`)
-- `limit` (number, optional): Max results (default: 20)
+- `query` (string, required): Search query (e.g., `"from:alice@example.com after:2026-01-01"`, `"subject:invoice"`, `"has:attachment"`)
+- `maxResults` (number, optional): Max results (default: 100, max: 500)
+- `pageToken` (string, optional): Page token for pagination (from previous response)
 
 #### `mcp__textforge__search_threads_by_contact`
 
-Find all threads involving a specific email address or domain.
+Find all threads involving a specific email address or domain. Returns threads with full metadata including `hasUnreadReply`.
 
-- `email` (string, required): Contact email to search for
+- `email` (string, required): Contact email to search for (e.g., `"john@example.com"` or `"@example.com"` for domain)
 
 #### `mcp__textforge__sync_thread`
 
-Sync a specific thread from the email provider to fetch new messages.
+Sync a specific thread from the email provider to fetch new messages. Requires an internal TextForge thread ID (GUID).
 
-- `threadId` (string, required): The thread ID to sync
+- `threadId` (string, required): Internal TextForge thread ID (GUID format)
 
 #### `mcp__textforge__sync_inbox`
 
 Trigger a full inbox sync to discover new threads and messages.
 
-- `fullSync` (boolean, optional): Force full history sync (default: false)
-
 #### `mcp__textforge__import_thread`
 
-Import a thread by provider thread ID into TextForge.
+Import a thread from the email provider by its external thread ID (e.g., from the `unmatchedProviderThreads` array in `search_messages` results). Returns the thread with its internal `id` (GUID) for use with `get_thread`, `create_draft`, etc. Idempotent: if already imported, syncs instead.
 
-- `externalId` (string, required): Provider thread ID to import
+- `externalThreadId` (string, required): Provider thread ID to import
+
+#### `mcp__textforge__list_recent_messages`
+
+List recent email messages across all threads, filtered by date and optionally by direction. Returns individual messages (not threads) with thread context (`threadId`, `threadSubject`) so you can navigate to the full thread via `get_thread`. Use this to quickly find recent inbound emails without paging through threads.
+
+- `since` (string, required): Return messages after this date/time (ISO 8601, e.g., `"2026-03-25T00:00:00Z"`)
+- `direction` (string, optional): Filter by direction: `"inbound"`, `"outbound"`, or omit for all
+- `limit` (number, optional): Max results (default: 50, max: 100)
+- `newestFirst` (boolean, optional): Sort order (default: true)
 
 ### Attachment Management (5 tools)
 
